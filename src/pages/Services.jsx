@@ -284,10 +284,11 @@ const Services = () => {
     <div className="min-h-screen bg-emerald-50/30">
       {/* Premium Sub-Nav Filter Bar */}
       <div className="sticky top-[70px] z-40 bg-white/90 backdrop-blur-xl border-b border-emerald-100 shadow-sm transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between gap-8 h-12">
-            {/* Category Scrollable List */}
-            <div className="flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide flex-1 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-8 h-auto md:h-12">
+            
+            {/* Category Scrollable List - Bottom on Mobile */}
+            <div className="flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide w-full md:w-auto md:flex-1 items-center order-2 md:order-1 no-scrollbar">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -295,7 +296,7 @@ const Services = () => {
                     navigate(cat.path);
                     setSelectedCategory(cat.id);
                   }}
-                  className={`whitespace-nowrap px-6 py-2.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${selectedCategory === cat.id
+                  className={`whitespace-nowrap px-4 md:px-6 py-2 md:py-2.5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 flex-shrink-0 ${selectedCategory === cat.id
                     ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20'
                     : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50'
                     }`}
@@ -305,20 +306,20 @@ const Services = () => {
               ))}
             </div>
 
-            {/* Interaction Group */}
-            <div className="flex items-center gap-4 flex-shrink-0">
-              <div className="relative group">
+            {/* Interaction Group - Top on Mobile */}
+            <div className="flex items-center gap-3 md:gap-4 flex-shrink-0 w-full md:w-auto justify-between md:justify-end order-1 md:order-2">
+              <div className="relative group flex-1 md:flex-none">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
                 <input
                   type="text"
                   placeholder="Find fresh produce..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-11 pr-4 py-2.5 bg-slate-100/50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 w-48 lg:w-72 text-sm font-bold transition-all placeholder:text-slate-400"
+                  className="pl-11 pr-4 py-2.5 bg-slate-100/50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 w-full md:w-48 lg:w-72 text-sm font-bold transition-all placeholder:text-slate-400"
                 />
               </div>
 
-              <Link to="/cart" className="relative group">
+              <Link to="/cart" className="relative group flex-shrink-0">
                 <div className="p-2.5 bg-emerald-50 rounded-2xl text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                   <ShoppingCart className="h-5 w-5" />
                 </div>
