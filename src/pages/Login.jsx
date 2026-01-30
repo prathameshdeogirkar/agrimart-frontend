@@ -124,6 +124,27 @@ const Login = () => {
             )}
           </AnimatePresence>
 
+          <div className="mb-8">
+            <button
+              type="button"
+              onClick={() => window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/google`}
+              className="w-full h-14 bg-white border-2 border-slate-100 hover:border-emerald-200 hover:bg-emerald-50 text-slate-700 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-3 group relative overflow-hidden"
+            >
+              <img
+                src="https://www.google.com/favicon.ico"
+                alt="Google"
+                className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+              />
+              <span className="tracking-wide">Sign in with Google</span>
+            </button>
+
+            <div className="flex items-center gap-4 mt-6">
+              <div className="h-px bg-slate-100 flex-1" />
+              <span className="text-[10px] font-black uppercase text-slate-300 tracking-widest">Or continue with email</span>
+              <div className="h-px bg-slate-100 flex-1" />
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Email Address</label>

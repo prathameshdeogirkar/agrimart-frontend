@@ -20,6 +20,7 @@ import AdminProducts from './pages/AdminProducts';
 import ProductEditPage from './pages/ProductEditPage';
 import Profile from './pages/Profile';
 import AdminOrders from './pages/AdminOrders';
+import OAuth2Callback from './components/OAuth2Callback';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -81,6 +82,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/sign" element={<Register />} />
+                <Route path="/oauth/callback" element={<OAuth2Callback />} />
 
                 {/* User Routes (Authenticated) */}
                 <Route

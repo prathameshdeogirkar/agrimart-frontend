@@ -64,6 +64,13 @@ export const authService = {
   },
 
   /**
+   * ✅ SET TOKEN: Manually save token (for OAuth2)
+   */
+  setToken: (token) => {
+    localStorage.setItem('token', token);
+  },
+
+  /**
    * ✅ GET TOKEN: Retrieve JWT from localStorage
    */
   getToken: () => {
