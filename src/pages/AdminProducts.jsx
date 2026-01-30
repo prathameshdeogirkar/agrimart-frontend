@@ -43,6 +43,7 @@ const AdminProducts = () => {
     imageUrl: '',
     galleryImages: [],
     stock: '',
+    active: true,
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -54,7 +55,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const data = await productService.getAll(page, 10);
+      const data = await productService.getAllAdmin(page, 10);
       if (data.content) {
         setProducts(data.content);
         setTotalPages(data.totalPages);
@@ -69,19 +70,24 @@ const AdminProducts = () => {
     }
   };
 
-  const handleDelete = async (productId) => {
-    if (!window.confirm('Delete this product? This action is irreversible.')) return;
-    setDeleting(productId);
+  const handleToggleStatus = async (product) => {
+    const action = product.active ? 'deactivate' : 'activate';
+    if (!window.confirm(`Are you sure you want to ${action} this product?`)) return;
+
+    setDeleting(product.id);
     try {
-      const result = await productService.delete(productId);
+      const result = await productService.update(product.id, {
+        ...product,
+        active: !product.active
+      });
       if (result.success) {
-        toast.success('Product deleted');
-        setProducts(products.filter((p) => p.id !== productId));
+        toast.success(`Product ${action}d`);
+        fetchProducts();
       } else {
         toast.error(result.error);
       }
     } catch (error) {
-      toast.error('Delete failed');
+      toast.error(`${action} failed`);
     } finally {
       setDeleting(null);
     }
@@ -115,6 +121,7 @@ const AdminProducts = () => {
       imageUrl: product.imageUrl || '',
       galleryImages: product.galleryImages || [],
       stock: product.stock || '',
+      active: product.active ?? true,
     });
     setIsPanelOpen(true);
   };
@@ -247,7 +254,12 @@ const AdminProducts = () => {
                               />
                             </div>
                             <div>
-                              <h4 className="font-black text-slate-900 tracking-tight">{p.name}</h4>
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-black text-slate-900 tracking-tight">{p.name}</h4>
+                                <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${p.active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-500'}`}>
+                                  {p.active ? 'Active' : 'Disabled'}
+                                </span>
+                              </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">ID: #{p.id}</span>
                                 {p.unitSize && (
@@ -287,16 +299,18 @@ const AdminProducts = () => {
                           <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => openEditPanel(p)}
-                              className="p-3 bg-white hover:bg-emerald-600 text-slate-400 hover:text-white rounded-xl shadow-sm border border-slate-100 transition-all"
+                              className="p-3 bg-white hover:bg-emerald-600 text-slate-400 hover:text-white rounded-xl shadow-sm border border-slate-100 transition-all font-bold text-[10px]"
+                              title="Edit Details"
                             >
                               <Edit3 className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => handleDelete(p.id)}
+                              onClick={() => handleToggleStatus(p)}
                               disabled={deleting === p.id}
-                              className="p-3 bg-white hover:bg-rose-600 text-slate-400 hover:text-white rounded-xl shadow-sm border border-slate-100 transition-all disabled:opacity-50"
+                              className={`p-3 bg-white transition-all rounded-xl shadow-sm border border-slate-100 disabled:opacity-50 ${p.active ? 'hover:bg-amber-500 text-slate-400 hover:text-white' : 'hover:bg-emerald-600 text-slate-400 hover:text-white'}`}
+                              title={p.active ? "Deactivate Product" : "Activate Product"}
                             >
-                              <Trash2 className="h-4 w-4" />
+                              {p.active ? <RefreshCw className="h-4 w-4" /> : <Check className="h-4 w-4" />}
                             </button>
                           </div>
                         </td>
@@ -498,6 +512,24 @@ const AdminProducts = () => {
                           type="text" name="storageAdvice" placeholder="Storage Rules" value={formData.storageAdvice} onChange={handleInputChange}
                           className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold focus:ring-2 focus:ring-emerald-500 shadow-inner"
                         />
+                      </div>
+
+                      {/* Active Status Toggle */}
+                      <div className="flex items-center justify-between p-6 bg-slate-50 rounded-2xl">
+                        <div>
+                          <p className="font-black text-slate-900 text-sm">Active Listing</p>
+                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Show this product to customers</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setFormData(prev => ({ ...prev, active: !prev.active }))}
+                          className={`w-14 h-8 rounded-full transition-all relative ${formData.active ? 'bg-emerald-500' : 'bg-slate-300'}`}
+                        >
+                          <motion.div
+                            animate={{ x: formData.active ? 24 : 4 }}
+                            className="absolute top-1 left-0 w-6 h-6 bg-white rounded-full shadow-md"
+                          />
+                        </button>
                       </div>
                     </div>
 

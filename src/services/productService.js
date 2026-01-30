@@ -22,6 +22,24 @@ export const productService = {
     }
   },
 
+  getAllAdmin: async (page = 0, size = 10, search = '', sort = 'id,desc') => {
+    try {
+      const queryParams = new URLSearchParams({
+        page,
+        size,
+        sort
+      });
+      if (search) {
+        queryParams.append('search', search);
+      }
+      const response = await api.get(`/api/products/admin?${queryParams.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching admin products:', error);
+      throw error;
+    }
+  },
+
   getById: async (id) => {
     try {
       const response = await api.get(`/api/products/${id}`);
