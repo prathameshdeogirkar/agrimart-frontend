@@ -10,7 +10,9 @@ const OAuth2Callback = () => {
     useEffect(() => {
         const token = searchParams.get('token');
 
-        if (token) {
+        // ✅ Validate Token Structure (Header.Payload.Signature)
+        // This prevents saving "error messages" or "HTML" as tokens
+        if (token && token.split('.').length === 3) {
             // Save token to local storage
             authService.setToken(token);
 
@@ -20,7 +22,8 @@ const OAuth2Callback = () => {
             // Redirect to home (this will trigger AuthContext to reload user state)
             window.location.href = '/';
         } else {
-            toast.error('Google login failed. No token received.');
+            console.error("Invalid token received:", token);
+            toast.error('Login failed: Invalid token received');
             navigate('/login');
         }
     }, [searchParams, navigate]);
