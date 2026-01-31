@@ -6,8 +6,16 @@ import api from './api';
  */
 const decodeToken = (token) => {
   try {
-    if (!token) return null;
-    const base64Url = token.split('.')[1];
+    if (!token || typeof token !== 'string') return null;
+
+    // Validate JWT format (must have 3 parts)
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.warn('Invalid JWT format received:', token.substring(0, 10) + '...');
+      return null;
+    }
+
+    const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)

@@ -127,7 +127,12 @@ const Login = () => {
           <div className="mb-8">
             <button
               type="button"
-              onClick={() => window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/google`}
+              onClick={() => {
+                // 🛑 FORCE FULL PAGE REDIRECT TO GOOGLE OAUTH
+                // DO NOT USE FETCH/AXIOS HERE
+                const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+                window.location.href = `${backendUrl}/oauth2/authorization/google`;
+              }}
               className="w-full h-14 bg-white border-2 border-slate-100 hover:border-emerald-200 hover:bg-emerald-50 text-slate-700 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-3 group relative overflow-hidden"
             >
               <img
