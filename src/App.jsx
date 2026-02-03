@@ -21,6 +21,7 @@ import ProductEditPage from './pages/ProductEditPage';
 import Profile from './pages/Profile';
 import AdminOrders from './pages/AdminOrders';
 import OAuth2Callback from './components/OAuth2Callback';
+import ChatWidget from './components/ChatWidget';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -171,7 +172,8 @@ function App() {
           </div>
         </CartProvider>
       </AuthProvider>
-    </Router>
+      <ChatWidget />
+    </Router >
   );
 }
 
